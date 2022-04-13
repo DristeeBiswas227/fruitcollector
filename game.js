@@ -43,6 +43,7 @@ class Game{
                 form.hide();
 
                 Player.getPlayerInfo();
+                player.getPlayerAtEnd();
                  image(back_img, 0, 0, 1000, 800);
                  var x =100;
                  var y=200;
@@ -74,7 +75,15 @@ class Game{
                  
                  }
                 
-                
+                if(player.score>=5){
+                    gameState = 2; 
+                    player.rank += 1;
+                    Player.updatePlayerAtEnd(player.rank);
+                    player.update();
+                    this.showRank();
+                    
+                }
+                 
 
                 if (keyIsDown(RIGHT_ARROW) && player.index !== null) {
                     player.distance -= 10
@@ -103,8 +112,11 @@ class Game{
                      }
                      fruitGroup.add(fruits);
                      
-                    }
-                
+                     
+                 }
+                 if(frameCount % 40 === 0){
+                    this.addObstacles()
+                 }
                  
                   if (player.index !== null) {
                       for (var i = 0; i < fruitGroup.length; i++) {
@@ -119,15 +131,54 @@ class Game{
                           
                       }
 
-                    }
+                      if(obstacleGroup.isTouching(players)){
+                       // gameState = 0;
+                      // gameState = 1;
+                       gameState = 2;
+                      //  gameState = 3;
+                      }
+                  }
                 }
+            
+                
+
+         
+         
+        
+         
+
+    
+                showRank() {
+                    alert("Awesome !! You finished the game! You rank is :" +player.rank)
+                  }
+
+                  gameOver() {
+                    textSize(40)
+                    fill("white")
+                    text("GAME OVER",displayWidth/2-400,displayHeight/2-200)
+                    }
     
     end(){
        console.log("Game Ended");
-       
+       console.log(player.rank)
+       this.gameOver();
     }
 
 
-    
+    addObstacles()
+    {       
+            var x, y;
+           // x= 200;
+            x = random(0, width-100);
+            //x = random(0);
+           // x = random();
+            
+            
+            y = 0
+            var obstacle = createSprite(x, y);
+            obstacle.addImage("obstacle", obstacleImage);
+            obstacle.velocityY = 4;
+            obstacle.scale = 0.15;
+            obstacleGroup.add(obstacle);
     }
-
+}
